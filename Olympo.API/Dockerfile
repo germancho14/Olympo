@@ -1,9 +1,9 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 
-COPY ./bin/Debug/net5.0/publish/ /app
+COPY ./bin/Release/net5.0/publish/ /app
 
 WORKDIR /app
 
 EXPOSE 80
 
-CMD dotnet olympo.dll
+CMD dotnet Olympo.API.dll

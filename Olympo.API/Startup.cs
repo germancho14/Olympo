@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Olympo.Domain.Repositories;
+using Olympo.Infrastructure;
 
-namespace Olympo
+namespace Olympo.API
 {
     public class Startup
     {
@@ -18,6 +20,9 @@ namespace Olympo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions<UserRepositoryOptions>();
+            services.AddSingleton<IUserRepository, UserRepository>();
+
             services.AddControllersWithViews()
                     .AddRazorRuntimeCompilation();
         }

@@ -4,12 +4,13 @@ using Olympo.Domain.Repositories;
 using MongoDB.Driver;
 using Microsoft.Extensions.Options;
 using System;
+using Olympo.Infrastructure.Repositories.DataModel;
 
-namespace Olympo.Infrastructure
+namespace Olympo.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly IMongoCollection<User> _users;
+        private readonly IMongoCollection<DatabaseUser> _users;
 
         public UserRepository(IOptions<UserRepositoryOptions> options)
         {
@@ -22,7 +23,7 @@ namespace Olympo.Infrastructure
 
             var client = new MongoClient(connStr);
             var db = client.GetDatabase("olympo");
-            _users = db.GetCollection<User>("users");
+            _users = db.GetCollection<DatabaseUser>("users");
         }
 
         public Task<User> FindAsync(string email)
@@ -32,7 +33,15 @@ namespace Olympo.Infrastructure
 
         public async Task SaveAsync(User user)
         {
-            await _users.InsertOneAsync(user);
+            var dbUser = new DatabaseUser
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Phone = user.Phone,
+            };
+
+            await _users.InsertOneAsync(dbUser);
         }
     }
 }

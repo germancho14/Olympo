@@ -1,4 +1,4 @@
-namespace Olympo.Infrastructure
+namespace Olympo.Infrastructure.Repositories
 {
     public class UserRepositoryOptions
     {

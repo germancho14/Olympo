@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Olympo.Domain.Repositories;
 using Olympo.Infrastructure;
+using Olympo.Infrastructure.Repositories;
 
 namespace Olympo.API
 {

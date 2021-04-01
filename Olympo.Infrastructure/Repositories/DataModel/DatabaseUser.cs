@@ -12,5 +12,7 @@ namespace Olympo.Infrastructure.Repositories.DataModel
         public string LastName { get; set; }
 
         public string Phone { get; set; }
+
+        public string Password { get; set; }
     }
 }

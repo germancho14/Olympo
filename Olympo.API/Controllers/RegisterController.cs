@@ -4,25 +4,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Olympo.API.Models;
 using Olympo.Domain.Entities;
-using Olympo.Domain.Repositories;
 
 namespace Olympo.API.Controllers
 {
     public class RegisterController : Controller
     {
         private readonly ILogger<RegisterController> _logger;
-        private readonly IUserRepository _userRepository;
+        private readonly UserService _userService;
 
         public RegisterController(
             ILogger<RegisterController> logger,
-            IUserRepository userRepository)
+            UserService userService)
         {
             _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));            
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         [HttpGet]
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Success()
         {
             return View();
         }
@@ -35,16 +40,18 @@ namespace Olympo.API.Controllers
             user.FirstName = userViewModel.FirstName;
             user.LastName = userViewModel.LastName;
             user.Phone = userViewModel.Phone;
-            await _userRepository.SaveAsync(user);
-            return View();
+            user.Password = userViewModel.Password;
+            await _userService.RegisterUserAsync(user);
+            TempData["Register_Email"] = userViewModel.Email;
+            return RedirectToAction("Success", "Register");
         }
 
         [HttpPost]
         [HttpGet]
-        public IActionResult VerifyEmail(string email)
+        public async Task<IActionResult> VerifyEmail(string email)
         {
-            _logger.LogDebug("Entre!!");
-            return Json(true);
+            var existingUser = await _userService.IsExistingUserAsync(email);
+            return Json(!existingUser);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

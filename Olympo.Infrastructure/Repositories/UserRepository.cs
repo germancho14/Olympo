@@ -26,9 +26,22 @@ namespace Olympo.Infrastructure.Repositories
             _users = db.GetCollection<DatabaseUser>("users");
         }
 
-        public Task<User> FindAsync(string email)
+        public async Task<User> FindAsync(string email)
         {
-            return null;
+            var filter = Builders<DatabaseUser>.Filter.Eq("_id", email);
+            var dbUser = await _users.Find(filter).FirstOrDefaultAsync();
+            
+            if(dbUser == null)
+            {
+                return null;
+            }
+
+            var user = new User(email);
+            user.FirstName = dbUser.FirstName;
+            user.LastName = dbUser.LastName;
+            user.Phone = dbUser.Phone;
+            user.Password = dbUser.Password;
+            return user;
         }
 
         public async Task SaveAsync(User user)
@@ -39,6 +52,7 @@ namespace Olympo.Infrastructure.Repositories
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Phone = user.Phone,
+                Password = user.Password,
             };
 
             await _users.InsertOneAsync(dbUser);

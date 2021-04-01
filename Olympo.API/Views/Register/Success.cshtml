@@ -1,0 +1,11 @@
+@{
+    ViewData["Title"] = "Registrar";
+}
+
+@{
+    if (TempData["Register_Email"] != null)
+    {
+        <div><h1>El usuario @TempData["Register_Email"] se ha registrado correctamente</h1></div>
+    }
+}
+

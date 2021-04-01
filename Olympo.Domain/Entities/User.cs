@@ -15,5 +15,7 @@ namespace Olympo.Domain.Entities
         public string Email => _email;
 
         public string Phone { get; set; }
+
+        public string Password { get; set; }
     }
 }
